@@ -1927,15 +1927,22 @@ class EP_API {
 							break;
 						case 'like':
 							if ( isset( $single_meta_query['value'] ) ) {
-								$terms_obj = array(
-									'query' => array(
-										'match' => array(
-											$meta_key_path => $single_meta_query['value'],
-										)
-									),
-								);
-							}
-							break;
+                                $terms_obj = array(
+                                    'bool' => array(
+                                        'must' => array(
+                                            array(
+                                                'match' => array(
+                                                    $meta_key_path => array(
+                                                        'query' => $single_meta_query['value'],
+                                                        'operator' => isset( $single_meta_query['ep_match_operator'] ) ? $single_meta_query['ep_match_operator'] : 'or',
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                );
+                            }
+                            break;
 						case '=':
 						default:
 							if ( isset( $single_meta_query['value'] ) ) {
